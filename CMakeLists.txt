@@ -14,15 +14,15 @@ configure_file (
   "${PROJECT_SOURCE_DIR}/libspiritconfig.h.in"
   "${PROJECT_BINARY_DIR}/libspiritconfig.h"
   )
- 
+
 # add the binary tree to the search path for include files
 # so that we will find libspiritconfig.h
 include_directories("${PROJECT_BINARY_DIR}")
- 
+
 # add the executable
 add_library(libspirit ${LIB_TYPE} "src/libspirit.c")
 
 # add the install targets
-install (TARGETS libspirit DESTINATION bin)
+install (TARGETS libspirit DESTINATION lib)
 install (FILES "${PROJECT_BINARY_DIR}/libspiritconfig.h" 
   DESTINATION include)
