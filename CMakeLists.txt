@@ -22,6 +22,9 @@ include_directories("${PROJECT_BINARY_DIR}")
 # add the executable
 add_library(libspirit ${LIB_TYPE} "src/libspirit.c")
 
+#unset the name prefix, we want it to be called libspirit even in windows
+set_target_properties(libspirit PROPERTIES PREFIX "")
+
 # add the install targets
 install (TARGETS libspirit DESTINATION lib)
 install (FILES "${PROJECT_BINARY_DIR}/libspiritconfig.h" 
