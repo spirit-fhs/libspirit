@@ -5,7 +5,7 @@
  *      Author: delbertooo
  */
 #include "libspirit.h"
-#include "../libspiritconfig.h"
+#include "libspiritconfig.h"
 
 
 LIBSPIRIT_API int fndlltest(void)
