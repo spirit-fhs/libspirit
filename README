@@ -1,1 +1,30 @@
-libspirit
+                       _ _ _               _      _ _   
+                      | (_) |__  ___ _ __ (_)_ __(_) |_ 
+                      | | | '_ \/ __| '_ \| | '__| | __|
+                      | | | |_) \__ \ |_) | | |  | | |_ 
+                      |_|_|_.__/|___/ .__/|_|_|  |_|\__|
+                                    |_|                 
+		
+
+
+README
+  It is better to light a candle than to curse the darkness.
+  
+BUILD ON WINDOWS WITH MSVC
+  Start your console and enter
+      cmake --help
+  to print a list of generators available on your system. You should pick
+  something like "Visual Studio 10" in step 3 of the following steps:
+  
+  1. mkdir build
+  2. cd build
+  3. cmake -G "Visual Studio 10" ..
+  4. devenv libspirit.sln /project ALL_BUILD /build Release
+
+BUILD ON UNIX WITH AUTOTOOLS AND GCC
+  Follow these steps:
+  
+  1. mkdir build
+  2. cd build
+  3. cmake -G "Unix Makefiles" ./../
+  4. make
