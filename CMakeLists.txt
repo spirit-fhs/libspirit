@@ -9,10 +9,6 @@ set (libspirit_VERSION_MINOR 0)
 # the name of the yajl directory
 set (YAJL_DIST_NAME yajl-2.0.3)
 
-#set(CMAKE_C_FLAGS "${CMAKE_ANSI_CFLAGS} ${CMAKE_C_FLAGS} CURL_STATICLIB")
-#set(CMAKE_REQUIRED_FLAGS ${CMAKE_ANSI_CFLAGS})
-
-
 
 # set the library type to dynamic (otherwise STATIC)
 set (LIB_TYPE SHARED)
@@ -50,6 +46,7 @@ endif()
 
 add_subdirectory (curl)
 include_directories ("${PROJECT_BINARY_DIR}/curl/include/curl")
+include_directories ("${PROJECT_BINARY_DIR}/curl/lib")
 include_directories ("${PROJECT_SOURCE_DIR}/curl/include")
 include_directories ("${PROJECT_BINARY_DIR}/yajl/${YAJL_DIST_NAME}/include")
 set (EXTRA_LIBS ${EXTRA_LIBS} libcurl)

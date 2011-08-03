@@ -8,6 +8,7 @@
 #include <libspiritconfig.h>
 #include <yajl/yajl_gen.h>
 #include <yajl/yajl_parse.h>
+#include <curl_config.h>
 #include <curl/curl.h>
 
 BEGIN_DECLS
