@@ -10,6 +10,8 @@
 #include <yajl/yajl_parse.h>
 #include <curl/curl.h>
 
+BEGIN_DECLS
+
 
 LIBSPIRIT_API int fndlltest(void)
 {
@@ -25,14 +27,16 @@ LIBSPIRIT_API int curltest(void)
 	CURL *curl;
 	CURLcode res;
 
-//	curl = curl_easy_init();
-//	if(curl)
-//	{
-//		curl_easy_setopt(curl, CURLOPT_URL, "http://example.com");
-//		res = curl_easy_perform(curl);
-//
-//		/* always cleanup */
-//		curl_easy_cleanup(curl);
-//	}
+	curl = curl_easy_init();
+	if(curl)
+	{
+		curl_easy_setopt(curl, CURLOPT_URL, "http://example.com");
+		res = curl_easy_perform(curl);
+
+		/* always cleanup */
+		curl_easy_cleanup(curl);
+	}
 	return 0;
 }
+
+END_DECLS
