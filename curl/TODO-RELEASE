@@ -1,0 +1,15 @@
+To be addressed in 7.21.6
+=========================
+
+284 - bug 3172608 "No re-authentication when HTTP connecton is closed"
+      http://curl.haxx.se/bug/view.cgi?id=3172608
+      Would be nice if someone could verify the suggested patch
+
+285 - bug 3163118 "Allow programatic use of telnet on Windows"
+      http://curl.haxx.se/bug/view.cgi?id=3163118
+      Would appreciate a Windows developer to give it a look before we apply
+      the suggested patch
+
+287 - bug 3215314 Post quote operation to rename fails in Windows
+
+289 -
