@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8)
 project (libspirit)
 
 
@@ -34,6 +34,13 @@ include_directories("${PROJECT_BINARY_DIR}")
   include_directories ("${PROJECT_BINARY_DIR}/yajl/${YAJL_DIST_NAME}/include")
   set (EXTRA_LIBS ${EXTRA_LIBS} yajl_s)
 #endif (USE_YAJL)
+
+set (CURL_STATICLIB ON CACHE BOOL "get a static libcurl" FORCE)
+set (BUILD_CURL_EXE OFF CACHE BOOL "no exe needed" FORCE)
+set (BUILD_CURL_TESTS OFF CACHE BOOL "no tests needed" FORCE)
+set (BUILD_RELEASE_DEBUG_DIRS ON CACHE BOOL "seems to be bugged when off" FORCE)
+add_subdirectory (curl)
+set (EXTRA_LIBS ${EXTRA_LIBS} libcurl)
 
 
 # add the executable
