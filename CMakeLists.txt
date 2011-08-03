@@ -40,6 +40,9 @@ set (BUILD_CURL_EXE OFF CACHE BOOL "no exe needed" FORCE)
 set (BUILD_CURL_TESTS OFF CACHE BOOL "no tests needed" FORCE)
 set (BUILD_RELEASE_DEBUG_DIRS ON CACHE BOOL "seems to be bugged when off" FORCE)
 add_subdirectory (curl)
+include_directories ("${PROJECT_BINARY_DIR}/curl/include/curl")
+include_directories ("${PROJECT_SOURCE_DIR}/curl/include")
+include_directories ("${PROJECT_BINARY_DIR}/yajl/${YAJL_DIST_NAME}/include")
 set (EXTRA_LIBS ${EXTRA_LIBS} libcurl)
 
 
