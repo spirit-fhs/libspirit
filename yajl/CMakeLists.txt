@@ -64,16 +64,16 @@ ENDIF (WIN32)
 
 
 ADD_SUBDIRECTORY(src)
-ADD_SUBDIRECTORY(test)
-ADD_SUBDIRECTORY(reformatter)
-ADD_SUBDIRECTORY(verify)
-ADD_SUBDIRECTORY(example)
-ADD_SUBDIRECTORY(perf)
+#ADD_SUBDIRECTORY(test)
+#ADD_SUBDIRECTORY(reformatter)
+#ADD_SUBDIRECTORY(verify)
+#ADD_SUBDIRECTORY(example)
+#ADD_SUBDIRECTORY(perf)
 
-INCLUDE(YAJLDoc.cmake)
+#INCLUDE(YAJLDoc.cmake)
 
 # a test target
-ADD_CUSTOM_TARGET(test
-                  ./run_tests.sh ${CMAKE_CURRENT_BINARY_DIR}/test/yajl_test
-                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test)
+#ADD_CUSTOM_TARGET(test
+#                  ./run_tests.sh ${CMAKE_CURRENT_BINARY_DIR}/test/yajl_test
+#                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test)
 

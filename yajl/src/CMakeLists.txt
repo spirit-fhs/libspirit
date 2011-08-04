@@ -25,7 +25,7 @@ SET (PUB_HDRS api/yajl_parse.h api/yajl_gen.h api/yajl_common.h api/yajl_tree.h)
 # Ensure defined when building YAJL (as opposed to using it from
 # another project).  Used to ensure correct function export when
 # building win32 DLL.
-ADD_DEFINITIONS(-DYAJL_BUILD)
+ADD_DEFINITIONS(-DYAJL_BUILD -fPIC)  #HACK added -fPIC
 
 # set up some paths
 SET (libDir ${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/lib)

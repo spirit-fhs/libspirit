@@ -28,3 +28,19 @@ BUILD ON UNIX WITH AUTOTOOLS AND GCC
   2. cd build
   3. cmake -G "Unix Makefiles" ./../
   4. make
+  
+WHAT CHANGES HAPPENED TO CURL AND YAJL?
+  There a nearly no changes but we need to add the compiler flag -fPIC to
+  compile on Unix x64 systems. The following modifications are done:
+  
+      yajl/src/CMakeLists.txt around line 28:
+      
+          ADD_DEFINITIONS(-DYAJL_BUILD -fPIC)  #HACK added -fPIC
+          
+      curl/lib/CMakeLists.txt around line 100:
+      
+          if(WIN32)
+            add_definitions( -D_USRDLL )
+          else() #HACK
+            add_definitions ( -fPIC ) #HACK
+          endif()
