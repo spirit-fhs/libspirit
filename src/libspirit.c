@@ -4,14 +4,14 @@
  *  Created on: 01.08.2011
  *      Author: delbertooo
  */
-#include "libspirit.h"
+
 #include <libspiritconfig.h>
 #include <yajl/yajl_gen.h>
 #include <yajl/yajl_parse.h>
 #include <curl_config.h>
 #include <curl/curl.h>
 
-BEGIN_DECLS
+#include "api/libspirit.h"
 
 
 LIBSPIRIT_API int fndlltest(void)
@@ -39,5 +39,3 @@ LIBSPIRIT_API int curltest(void)
 	}
 	return 0;
 }
-
-END_DECLS

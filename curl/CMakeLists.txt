@@ -854,11 +854,11 @@ endif()
 
 # Installation.
 # First, install generated curlbuild.h
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/curl/curlbuild.h"
-    DESTINATION include/curl )
+#install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/curl/curlbuild.h"
+#    DESTINATION include/curl )
 # Next, install other headers excluding curlbuild.h
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/curl"
-    DESTINATION include
-    FILES_MATCHING PATTERN "*.h"
-    PATTERN "curlbuild.h" EXCLUDE)
+#install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/curl"
+#    DESTINATION include
+#    FILES_MATCHING PATTERN "*.h"
+#    PATTERN "curlbuild.h" EXCLUDE)
  

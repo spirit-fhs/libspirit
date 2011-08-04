@@ -6,6 +6,9 @@ project (libspirit)
 set (libspirit_VERSION_MAJOR 1)
 set (libspirit_VERSION_MINOR 0)
 
+set (incDir ${PROJECT_BINARY_DIR}/include/libspirit)
+set (PUB_HDRS src/api/libspirit_common.h src/api/libspirit.h)
+
 # the name of the yajl directory
 set (YAJL_DIST_NAME yajl-2.0.3)
 
@@ -26,6 +29,7 @@ configure_file (
 # add the binary tree to the search path for include files
 # so that we will find libspiritconfig.h
 include_directories("${PROJECT_BINARY_DIR}")
+#include_directories ("${PROJECT_BINARY_DIR}/include")
 
 
 # add the yajl json library
@@ -56,18 +60,36 @@ set (EXTRA_LIBS ${EXTRA_LIBS} libcurl)
 add_library(libspirit ${LIB_TYPE} "src/libspirit.c")
 target_link_libraries (libspirit  ${EXTRA_LIBS})
 
+#copy public headers
+FILE(MAKE_DIRECTORY ${incDir})
+FOREACH (header ${PUB_HDRS})
+  SET (header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
+
+  #EXEC_PROGRAM(${CMAKE_COMMAND} ARGS -E copy_if_different ${header} ${incDir})
+
+  ADD_CUSTOM_COMMAND(TARGET libspirit PRE_BUILD  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${header} ${incDir})
+  ADD_CUSTOM_COMMAND(TARGET libspirit POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${header} ${incDir})
+ENDFOREACH (header ${PUB_HDRS})
+
+INCLUDE_DIRECTORIES(${incDir}/..)
+
+
 #unset the name prefix, we want it to be called libspirit even in windows
 set_target_properties(libspirit PROPERTIES PREFIX "")
+
+
+#set compiler flag for static curl
 if(MSVC)
   set_property(TARGET libspirit PROPERTY COMPILE_DEFINITIONS CURL_STATICLIB)
 else()
   add_definitions(-DCURL_STATICLIB)
 endif()
 
+
 # add the install targets
 install (TARGETS libspirit DESTINATION lib)
-install (FILES "${PROJECT_BINARY_DIR}/libspiritconfig.h" 
-  DESTINATION include)
+#install (FILES "${PROJECT_BINARY_DIR}/libspiritconfig.h" DESTINATION include)
+install (FILES ${PUB_HDRS} DESTINATION include/libspirit)
 
 
 # build a CPack driven installer package
