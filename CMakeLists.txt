@@ -29,8 +29,6 @@ configure_file (
 # add the binary tree to the search path for include files
 # so that we will find libspiritconfig.h
 include_directories("${PROJECT_BINARY_DIR}")
-include_directories ("${PROJECT_BINARY_DIR}/include")
-
 
 # add the yajl json library
 #if (USE_YAJL)
@@ -61,17 +59,17 @@ add_library(libspirit ${LIB_TYPE} "src/libspirit.c")
 target_link_libraries (libspirit  ${EXTRA_LIBS})
 
 #copy public headers
-FILE(MAKE_DIRECTORY ${incDir})
-FOREACH (header ${PUB_HDRS})
-  SET (header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
+file (MAKE_DIRECTORY ${incDir})
+foreach (header ${PUB_HDRS})
+  set (header ${PROJECT_SOURCE_DIR}/${header})
 
   #EXEC_PROGRAM(${CMAKE_COMMAND} ARGS -E copy_if_different ${header} ${incDir})
+  execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${header} ${incDir})
+  #ADD_CUSTOM_COMMAND(TARGET libspirit PRE_BUILD  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${header} ${incDir})
+  #ADD_CUSTOM_COMMAND(TARGET libspirit POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${header} ${incDir})
+endforeach (header ${PUB_HDRS})
 
-  ADD_CUSTOM_COMMAND(TARGET libspirit PRE_BUILD  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${header} ${incDir})
-  ADD_CUSTOM_COMMAND(TARGET libspirit POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${header} ${incDir})
-ENDFOREACH (header ${PUB_HDRS})
-
-INCLUDE_DIRECTORIES(${incDir}/..)
+include_directories (${incDir}/..)
 
 
 #unset the name prefix, we want it to be called libspirit even in windows
