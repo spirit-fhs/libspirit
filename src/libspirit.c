@@ -11,7 +11,7 @@
 #include <curl_config.h>
 #include <curl/curl.h>
 
-#include "api/libspirit.h"
+#include <libspirit/libspirit.h>
 
 
 LIBSPIRIT_API int fndlltest(void)
