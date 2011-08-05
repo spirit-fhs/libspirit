@@ -18,7 +18,8 @@ extern "C" {
 
 LIBSPIRIT_API int fndlltest(void);
 
-LIBSPIRIT_API int curltest(void);
+LIBSPIRIT_API int curltest(char* url);
+LIBSPIRIT_API int curltest2(void);
 
 
 
