@@ -10,22 +10,77 @@
 #include <stddef.h>
 
 #include <libspiritconfig.h>
-#include <yajl/yajl_gen.h>
-#include <yajl/yajl_parse.h>
+#include <yajl/yajl_tree.h>
 #include <curl_config.h>
 #include <curl/curl.h>
 
 #include <libspirit/libspirit.h>
 
 
-LIBSPIRIT_API int fndlltest(void)
-{
-	yajl_gen g;
-	yajl_status st;
-	yajl_handle h;
-	yajl_config(h, yajl_allow_comments, 1);
-	st = yajl_parse(h, "{}", 2);
-	return 42;
+LIBSPIRIT_API int fndlltest(void) {
+//	yajl_gen g;
+//	yajl_status st;
+//	yajl_handle h;
+//	yajl_config(h, yajl_allow_comments, 1);
+//	st = yajl_parse(h, "{}", 2);
+//	return 42;
+	static unsigned char fileData[65536];
+
+	size_t rd;
+	yajl_val node;
+	char errbuf[1024];
+	FILE *fp;
+
+	/* null plug buffers */
+	fileData[0] = errbuf[0] = 0;
+
+	/* read the entire config file */
+	if((fp = fopen("sample.config", "r"))==NULL) {
+	    printf("Cannot open file.\n");
+	    return 1;
+	  }
+
+	//rd = fread((void *) fileData, 1, sizeof(fileData) - 1, stdin);
+	rd = fread((void *) fileData, 1, sizeof(fileData) - 1, fp);
+	puts(fileData);
+
+
+	/* file read error handling */
+	if (rd == 0 && !feof(fp)) {
+		fprintf(stderr, "error encountered on file read\n");
+		return 1;
+	} else if (rd >= sizeof(fileData) - 1) {
+		fprintf(stderr, "config file too big\n");
+		return 1;
+	}
+
+	/* we have the whole config file in memory.  let's parse it ... */
+	node = yajl_tree_parse((const char *) fileData, errbuf, sizeof(errbuf));
+
+	/* parse error handling */
+	if (node == NULL) {
+		fprintf(stderr, "parse_error: ");
+		if (strlen(errbuf))
+			fprintf(stderr, " %s", errbuf);
+		else
+			fprintf(stderr, "unknown error");
+		fprintf(stderr, "\n");
+		return 1;
+	}
+
+	/* ... and extract a nested value from the config file */
+	{
+		const char * path[] = { "Logging", "timeFormat", (const char *) 0 };
+		yajl_val v = yajl_tree_get(node, path, yajl_t_string);
+		if (v)
+			printf("%s/%s: %s\n", path[0], path[1], YAJL_GET_STRING(v));
+		else
+			printf("no such node: %s/%s\n", path[0], path[1]);
+	}
+
+	yajl_tree_free(node);
+
+	return 0;
 }
 
 LIBSPIRIT_API int curltest(char* url)
