@@ -83,43 +83,56 @@ LIBSPIRIT_API int fndlltest(void) {
 	return 0;
 }
 
-LIBSPIRIT_API int curltest(char* url)
-{
+LIBSPIRIT_API int curltest(char* url) {
 	CURL *curl;
 	CURLcode res;
+	struct curl_slist *slist = NULL;
+	char agent[20];
 
 	curl = curl_easy_init();
-	if(curl)
-	{
+	if (curl) {
 		curl_easy_setopt(curl, CURLOPT_URL, url);
 		curl_easy_setopt(curl, CURLOPT_VERBOSE, url);
 
 #		ifdef SKIP_PEER_VERIFICATION
-			/*
-			 * If you want to connect to a site who isn't using a certificate that is
-			 * signed by one of the certs in the CA bundle you have, you can skip the
-			 * verification of the server's certificate. This makes the connection
-			 * A LOT LESS SECURE.
-			 *
-			 * If you have a CA cert for the server stored someplace else than in the
-			 * default bundle, then the CURLOPT_CAPATH option might come handy for
-			 * you.
-			 */
-			puts("SKIP_PEER_VERIFICATION 1");
-			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+		/*
+		 * If you want to connect to a site who isn't using a certificate that is
+		 * signed by one of the certs in the CA bundle you have, you can skip the
+		 * verification of the server's certificate. This makes the connection
+		 * A LOT LESS SECURE.
+		 *
+		 * If you have a CA cert for the server stored someplace else than in the
+		 * default bundle, then the CURLOPT_CAPATH option might come handy for
+		 * you.
+		 */
+		puts("SKIP_PEER_VERIFICATION 1");
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
 #		endif
 
 #		ifdef SKIP_HOSTNAME_VERIFICATION
-			/*
-			 * If the site you're connecting to uses a different host name that what
-			 * they have mentioned in their server certificate's commonName (or
-			 * subjectAltName) fields, libcurl will refuse to connect. You can skip
-			 * this check, but this will make the connection less secure.
-			 */
-			puts("SKIP_HOSTNAME_VERIFICATION 1");
-			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+		/*
+		 * If the site you're connecting to uses a different host name that what
+		 * they have mentioned in their server certificate's commonName (or
+		 * subjectAltName) fields, libcurl will refuse to connect. You can skip
+		 * this check, but this will make the connection less secure.
+		 */
+		puts("SKIP_HOSTNAME_VERIFICATION 1");
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
 #		endif
+
+		curl_easy_setopt(curl, CURLOPT_SSL_CIPHER_LIST, "DHE-RSA-AES256-SHA");
+		sprintf(agent, "libspirit v%i.%i", libspirit_VERSION_MAJOR, libspirit_VERSION_MINOR);
+		curl_easy_setopt(
+				curl,
+				CURLOPT_USERAGENT,
+				agent);
+
+		slist = curl_slist_append(slist, "Accept: application/json");
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
+
 		res = curl_easy_perform(curl);
+
+		curl_slist_free_all(slist); /* free the list again */
 
 		printf("res = %i -- %s\n", res, curl_easy_strerror(res));
 
