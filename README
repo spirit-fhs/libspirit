@@ -4,11 +4,26 @@
                       | | | |_) \__ \ |_) | | |  | | |_ 
                       |_|_|_.__/|___/ .__/|_|_|  |_|\__|
                                     |_|                 
-		
+        
 
 
 README
   It is better to light a candle than to curse the darkness.
+  
+DEPENDENCIES
+  Libspirit needs the OpenSSL development libraries for supporting the HTTPS
+  protocol.
+  
+  On the most Unix systems you can get this by using your package manager e.g.:
+    Ubuntu:  sudo apt-get install libssl-dev
+    Gentoo:  sudo emerge dev-libs/openssl
+      
+  On Windows the most simple way to install OpenSSL is to download the
+  installer here:
+    http://www.slproweb.com/products/Win32OpenSSL.html
+  Download and install the "Win32 OpenSSL v<actual version>" but not the one
+  with "Light" as suffix. Its recommended to use the default installation
+  settings and location to ensure CMake can find OpenSSL.
   
 BUILD ON WINDOWS WITH MSVC
   Start your console and enter
@@ -44,3 +59,15 @@ WHAT CHANGES HAPPENED TO CURL AND YAJL?
           else() #HACK
             add_definitions ( -fPIC ) #HACK
           endif()
+          
+      curl/CMakeLists.txt around line 256:
+      
+          if(CMAKE_USE_OPENSSL)
+              if(WIN32)
+                find_package(OpenSSL)
+                if(OPENSSL_FOUND OR
+                  (OPENSSL_INCLUDE_DIR AND OPENSSL_LIBRARIES))
+                  message(STATUS "Found OpenSSL!")
+                  set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES}
+                    ${OPENSSL_INCLUDE_DIR})
+                  include_directories(${OPENSSL_INCLUDE_DIR})
