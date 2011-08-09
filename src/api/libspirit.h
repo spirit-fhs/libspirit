@@ -14,7 +14,8 @@
 extern "C" {
 #endif
 
-#define SKIP_PEER_VERIFICATION
+#define SKIP_PEER_VERIFICATION YES
+#define SKIP_HOSTNAME_VERIFICATION YES
 
 LIBSPIRIT_API int fndlltest(void);
 

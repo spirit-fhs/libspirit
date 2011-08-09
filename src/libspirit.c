@@ -105,16 +105,18 @@ LIBSPIRIT_API int curltest(char* url)
 			 * default bundle, then the CURLOPT_CAPATH option might come handy for
 			 * you.
 			 */
+			puts("SKIP_PEER_VERIFICATION 1");
 			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
 #		endif
 
-#		ifdef SKIP_HOSTNAME_VERFICATION
+#		ifdef SKIP_HOSTNAME_VERIFICATION
 			/*
 			 * If the site you're connecting to uses a different host name that what
 			 * they have mentioned in their server certificate's commonName (or
 			 * subjectAltName) fields, libcurl will refuse to connect. You can skip
 			 * this check, but this will make the connection less secure.
 			 */
+			puts("SKIP_HOSTNAME_VERIFICATION 1");
 			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
 #		endif
 		res = curl_easy_perform(curl);
