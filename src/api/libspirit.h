@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-
+#define SKIP_PEER_VERIFICATION
 
 LIBSPIRIT_API int fndlltest(void);
 
