@@ -1,4 +1,5 @@
 .cproject
 .project
 deletebuild.bat
+complete-rebuild.bat
 /build
