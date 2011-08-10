@@ -19,6 +19,11 @@
 
 #include "spirit_data.h"
 
+
+#define STR_VALUE(arg) #arg
+#define SKIP_PEER_VERIFICATION DEFINED
+#define SKIP_HOSTNAME_VERIFICATION DEFINED
+
 struct MemoryStruct {
 	char *memory;
 	size_t size;
@@ -236,28 +241,109 @@ LIBSPIRIT_API int curltest(char* url) {
 	return 0;
 }
 
-static void Spirit_initLibcurlSettings(struct LibcurlSettings *curl) {
+static SPIRITcode Spirit_initLibcurlSettings(struct LibcurlSettings *curl) {
+	SPIRITcode res = SPIRITE_OK;
 	//curl = malloc(sizeof(struct LibcurlSettings));
 	curl->header_accept = "Accept: application/json";
 	curl->ssl_cipher_type = "DHE-RSA-AES256-SHA";
-	curl->user_agent = "libspirit/%d.%d";
+	curl->user_agent = "libspirit/" STR_VALUE(libspirit_VERSION_MAJOR) "." STR_VALUE(libspirit_VERSION_MINOR);
 
-	return;
+	return res;
 }
 
-LIBSPIRIT_API SPIRIT *spirit_init(void) {
+static SPIRITcode Spirit_initCurlConnectionForUrl(struct SpiritHandle *spirit, CURL **curl_handle, const char *url, struct MemoryStruct *chunk) {
+	struct curl_slist *slist = NULL;
+	char *request_url;//[strlen(spirit->base_url) + strlen(url) + 1];
+	SPIRITcode res = SPIRITE_OK;
+	CURL *curl;
+
+	request_url = calloc(strlen(spirit->base_url) + strlen(url) + 1, sizeof(char));
+	if (request_url == NULL)
+		return SPIRITE_OUT_OF_MEMORY;
+
+	strcpy(request_url, spirit->base_url);
+	strcpy(&(request_url[strlen(request_url)]), url);
+
+	printf("request_url: %s\n", request_url);
+
+	curl = curl_easy_init();
+	if (curl) {
+		curl_easy_setopt(curl, CURLOPT_URL, request_url);
+		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+		curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L);
+
+#ifdef SKIP_PEER_VERIFICATION
+		/* connect to a site who isn't using a certificate that is signed by one of the certs in the CA bundle you have */
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+#endif
+
+#ifdef SKIP_HOSTNAME_VERIFICATION
+		/* skip check if site you're connecting uses a different host name to what they have mentioned in their server certificate's commonName */
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+#endif
+		curl_easy_setopt(curl, CURLOPT_SSL_CIPHER_LIST, spirit->curl.ssl_cipher_type);
+		curl_easy_setopt( curl, CURLOPT_USERAGENT, spirit->curl.user_agent);
+		printf("spirit->curl.ssl_cipher_type: %s\nspirit->curl.user_agent: %s\nspirit->curl.header_accept: %s\n", spirit->curl.ssl_cipher_type, spirit->curl.user_agent, spirit->curl.header_accept);
+		slist = curl_slist_append(slist, spirit->curl.header_accept);
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
+
+		/* send all data to this function  */
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+
+		/* we pass our 'chunk' struct to the callback function */
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)chunk);
+	}
+	*curl_handle = curl;
+
+	printf("in setup: %X\n", &curl);
+
+	return res;
+}
+
+LIBSPIRIT_API SPIRIT *spirit_init(const char *base_url) {
 	struct SpiritHandle *handle;
 	handle = calloc(1, sizeof(struct SpiritHandle));
-	fprintf(stdout, "ein handle: %d\n", sizeof(struct SpiritHandle));
+	if (handle == NULL)
+			return NULL;
+
+
+	fprintf(stdout, "ein handle ist: %d Byte gross.\n", sizeof(struct SpiritHandle));
 
 	Spirit_initLibcurlSettings(&handle->curl);
 
-	if (handle == NULL)
-		return NULL;
+	handle->base_url = base_url;
+
+
 
 
 
 	return handle;
+}
+
+LIBSPIRIT_API SPIRITcode spirit_news_print_all(SPIRIT *handle) {
+	struct SpiritHandle *data = (struct SpiritHandle *)handle;
+	CURL *curl;
+	struct MemoryStruct chunk;
+	SPIRITcode res = SPIRITE_OK;
+
+	chunk.memory = malloc(1); /* will be grown as needed by the realloc above */
+	chunk.size = 0; /* no data at this point */
+
+	if (chunk.memory == NULL)
+		return SPIRITE_OUT_OF_MEMORY;
+
+	res = Spirit_initCurlConnectionForUrl(handle, &curl, "news", &chunk);
+	printf("preperform %X\n", &curl);
+	curl_easy_perform(curl);
+	printf("performed well\n");
+	/* always cleanup -- did we cleanup the slist too? */
+	curl_easy_cleanup(curl);
+
+	printf("\n--- ALL NEWS ---\n");
+	printf(chunk.memory);
+	printf("\n================\n");
+
+	return res;
 }
 
 

@@ -18,6 +18,7 @@ struct LibcurlSettings {
 
 struct SpiritHandle {
 	struct LibcurlSettings curl;
+	char *base_url;
 };
 
 

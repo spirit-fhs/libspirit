@@ -14,8 +14,7 @@
 extern "C" {
 #endif
 
-#define SKIP_PEER_VERIFICATION DEFINED
-#define SKIP_HOSTNAME_VERIFICATION DEFINED
+
 
 LIBSPIRIT_API typedef enum {
   SPIRITE_OK = 0,
@@ -31,6 +30,8 @@ LIBSPIRIT_API int fndlltest(void);
 
 LIBSPIRIT_API int curltest(char* url);
 
+LIBSPIRIT_API SPIRITcode spirit_news_print_all(SPIRIT *handle);
+LIBSPIRIT_API SPIRIT *spirit_init(const char *base_url);
 
 
 
