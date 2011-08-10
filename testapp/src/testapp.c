@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <libspirit/libspirit.h>
+#include <libspirit/libspirit_error.h>
 
 int main(void) {
 	SPIRIT *spirit_handle;
@@ -19,7 +20,7 @@ int main(void) {
 	spirit_handle = spirit_init("https://212.201.64.226:8443/fhs-spirit/");
 	res = spirit_news_print_all(spirit_handle);
 
-	printf("\nspirit result %d: %s\n", res, spirit_errstring(res));
+	printf("\nspirit result %i: %s\n", res, spirit_errstring(res));
 
 	//printf("-- libspirit test application --\n");
 	//fflush(stdout);
