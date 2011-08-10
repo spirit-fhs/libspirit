@@ -15,6 +15,7 @@ set (YAJL_DIST_NAME yajl-2.0.3)
 
 # set the library type to dynamic (otherwise STATIC)
 set (LIB_TYPE SHARED)
+#set (LIB_TYPE STATIC)
 
 
 # configure a header file to pass some of the CMake settings
@@ -74,6 +75,9 @@ include_directories (${incDir}/..)
 
 #unset the name prefix, we want it to be called libspirit even in windows
 set_target_properties(libspirit PROPERTIES PREFIX "")
+
+#build testapp
+add_subdirectory(testapp)
 
 
 #set compiler flag for static curl
