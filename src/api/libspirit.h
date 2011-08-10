@@ -14,13 +14,15 @@
 extern "C" {
 #endif
 
-#define SKIP_PEER_VERIFICATION YES
-#define SKIP_HOSTNAME_VERIFICATION YES
+#define SKIP_PEER_VERIFICATION DEFINED
+#define SKIP_HOSTNAME_VERIFICATION DEFINED
+
+
+LIBSPIRIT_API typedef void SPIRIT;
 
 LIBSPIRIT_API int fndlltest(void);
 
 LIBSPIRIT_API int curltest(char* url);
-LIBSPIRIT_API int curltest2(void);
 
 
 

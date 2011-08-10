@@ -13,6 +13,11 @@
 #include <libspirit/libspirit.h>
 
 int main(void) {
+	SPIRIT *spirit_handle;
+
+	spirit_handle = spirit_init();
+
+
 	printf("-- libspirit test application --\n");
 	fflush(stdout);
 
