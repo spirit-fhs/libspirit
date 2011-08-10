@@ -7,7 +7,13 @@ set (libspirit_VERSION_MAJOR 1)
 set (libspirit_VERSION_MINOR 0)
 
 set (incDir ${PROJECT_BINARY_DIR}/include/libspirit)
-set (PUB_HDRS src/api/libspirit_common.h src/api/libspirit.h)
+
+SET (SRCS src/libspirit.c
+          src/libspirit_error.c)
+SET (HDRS src/spirit_data.h)
+set (PUB_HDRS src/api/libspirit_common.h
+              src/api/libspirit.h
+              src/api/libspirit_error.h)
 
 # the name of the yajl directory
 set (YAJL_DIST_NAME yajl-2.0.3)
@@ -30,7 +36,7 @@ configure_file (
 # add the binary tree to the search path for include files
 # so that we will find libspiritconfig.h
 include_directories("${PROJECT_BINARY_DIR}")
-include_directories("${PROJECT_SOURCE_DIR}")
+#include_directories("${PROJECT_SOURCE_DIR}") #shouldnt need this anymore
 
 # add the yajl json library
 #if (USE_YAJL)
@@ -57,7 +63,7 @@ set (EXTRA_LIBS ${EXTRA_LIBS} libcurl)
 
 
 # add the executable
-add_library(libspirit ${LIB_TYPE} "src/libspirit.c")
+add_library(libspirit ${LIB_TYPE} ${SRCS} ${HDRS} ${PUB_HDRS})
 target_link_libraries (libspirit  ${EXTRA_LIBS})
 
 #copy public headers

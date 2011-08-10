@@ -153,7 +153,7 @@ LIBSPIRIT_API int curltest(char* url) {
 #		endif
 
 		curl_easy_setopt(curl, CURLOPT_SSL_CIPHER_LIST, "DHE-RSA-AES256-SHA");
-		sprintf(agent, "libspirit/%i.%i", libspirit_VERSION_MAJOR,
+		sprintf(agent, "libspirit/%d.%d", libspirit_VERSION_MAJOR,
 				libspirit_VERSION_MINOR);
 		curl_easy_setopt( curl, CURLOPT_USERAGENT, agent);
 
@@ -204,7 +204,7 @@ LIBSPIRIT_API int curltest(char* url) {
 				yajl_val v = yajl_tree_get(node, path, yajl_t_array);
 				if (YAJL_IS_ARRAY(v)) {
 					yajl_val *allNews = v->u.array.values;//YAJL_GET_ARRAY(v);
-					int i;
+					unsigned int i;
 					for (i = 0; i < v->u.array.len; ++i) {
 						const char * path[] = { "title", (const char *) 0 };
 						//printf("\n%X", allNews);
@@ -236,8 +236,28 @@ LIBSPIRIT_API int curltest(char* url) {
 	return 0;
 }
 
+static void Spirit_initLibcurlSettings(struct LibcurlSettings *curl) {
+	//curl = malloc(sizeof(struct LibcurlSettings));
+	curl->header_accept = "Accept: application/json";
+	curl->ssl_cipher_type = "DHE-RSA-AES256-SHA";
+	curl->user_agent = "libspirit/%d.%d";
+
+	return;
+}
+
 LIBSPIRIT_API SPIRIT *spirit_init(void) {
 	struct SpiritHandle *handle;
+	handle = calloc(1, sizeof(struct SpiritHandle));
+	fprintf(stdout, "ein handle: %d\n", sizeof(struct SpiritHandle));
+
+	Spirit_initLibcurlSettings(&handle->curl);
+
+	if (handle == NULL)
+		return NULL;
+
+
 
 	return handle;
 }
+
+
