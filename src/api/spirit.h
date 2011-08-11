@@ -30,10 +30,6 @@ LIBSPIRIT_API typedef enum {
 
 LIBSPIRIT_API typedef void SPIRIT;
 
-//LIBSPIRIT_API int fndlltest(void);
-
-//LIBSPIRIT_API int curltest(char* url);
-
 
 LIBSPIRIT_API SPIRIT *spirit_init(const char *base_url);
 LIBSPIRIT_API void spirit_cleanup(SPIRIT *handle);
