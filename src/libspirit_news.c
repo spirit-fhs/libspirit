@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 
+#include <curl_config.h>
 #include <curl/curl.h>
 #include <yajl/yajl_tree.h>
 
