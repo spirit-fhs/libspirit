@@ -264,7 +264,7 @@ static SPIRITcode Spirit_initCurlConnectionForUrl(struct SpiritHandle *spirit, C
 	strcpy(request_url, spirit->base_url);
 	strcpy(&(request_url[strlen(request_url)]), url);
 
-	printf("request_url: %s\n", request_url);
+
 
 	curl = curl_easy_init();
 	if (curl) {
@@ -283,7 +283,7 @@ static SPIRITcode Spirit_initCurlConnectionForUrl(struct SpiritHandle *spirit, C
 #endif
 		curl_easy_setopt(curl, CURLOPT_SSL_CIPHER_LIST, spirit->curl.ssl_cipher_type);
 		curl_easy_setopt( curl, CURLOPT_USERAGENT, spirit->curl.user_agent);
-		printf("spirit->curl.ssl_cipher_type: %s\nspirit->curl.user_agent: %s\nspirit->curl.header_accept: %s\n", spirit->curl.ssl_cipher_type, spirit->curl.user_agent, spirit->curl.header_accept);
+
 		slist = curl_slist_append(slist, spirit->curl.header_accept);
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
 
@@ -295,7 +295,62 @@ static SPIRITcode Spirit_initCurlConnectionForUrl(struct SpiritHandle *spirit, C
 	}
 	*curl_handle = curl;
 
-	printf("in setup: %X\n", &curl);
+	return res;
+}
+
+static void fprintNChars(FILE *file, char c, unsigned int n) {
+	unsigned int i;
+	for (i = 0; i < n; ++i)
+		fprintf(file, "%c", c);
+}
+
+static SPIRITcode Spirit_printNewsFromJsonString(const char* json) {
+	yajl_val node;
+	char errbuf[1024];
+	SPIRITcode res = SPIRITE_OK;
+
+	node = yajl_tree_parse((const char *) json, errbuf, sizeof(errbuf));
+
+	/* parse error handling */
+	if (node == NULL)
+		return SPIRITE_JSON_PARSE_ERROR;
+
+	/* print news */
+	{
+		const char * path[] = { "news", (const char *) 0 };
+		yajl_val newsNode = yajl_tree_get(node, path, yajl_t_array);
+		if (YAJL_IS_ARRAY(newsNode)) {
+			yajl_val *allNews = newsNode->u.array.values;
+			unsigned int i;
+			for (i = 0; i < newsNode->u.array.len; ++i) {
+				const char * pathTitle[] = { "title", (const char *) 0 };
+				const char * pathContent[] = { "content", (const char *) 0 };
+
+				yajl_val title = yajl_tree_get(*(allNews), pathTitle, yajl_t_string);
+				yajl_val content = yajl_tree_get(*(allNews), pathContent, yajl_t_string);
+
+				if (YAJL_IS_STRING(title) && YAJL_IS_STRING(content)) {
+					printf("--[ %s ]", YAJL_GET_STRING(title));
+					fprintNChars(stdout, '-', 80 - strlen(YAJL_GET_STRING(title)) - 6);
+					printf("\n%s\n", YAJL_GET_STRING(content));
+					fprintNChars(stdout, '-', 80);
+					printf("\n\n");
+				}
+				//else
+				//	printf("no such node: %s\n", path[0]);
+
+				++allNews;
+			}
+
+
+
+		}
+		else
+			//printf("no such node: %s\n", path[0]);
+			return SPIRITE_JSON_NODE_NOT_FOUND;
+	}
+
+	yajl_tree_free(node);
 
 	return res;
 }
@@ -307,7 +362,7 @@ LIBSPIRIT_API SPIRIT *spirit_init(const char *base_url) {
 			return NULL;
 
 
-	fprintf(stdout, "ein handle ist: %d Byte gross.\n", sizeof(struct SpiritHandle));
+	//fprintf(stdout, "ein handle ist: %d Byte gross.\n", sizeof(struct SpiritHandle));
 
 	Spirit_initLibcurlSettings(&handle->curl);
 
@@ -318,6 +373,13 @@ LIBSPIRIT_API SPIRIT *spirit_init(const char *base_url) {
 
 
 	return handle;
+}
+
+LIBSPIRIT_API void spirit_cleanup(SPIRIT *handle) {
+	struct SpiritHandle *data = (struct SpiritHandle *)handle;
+
+	if (data)
+		free(data);
 }
 
 LIBSPIRIT_API SPIRITcode spirit_news_print_all(SPIRIT *handle) {
@@ -333,15 +395,22 @@ LIBSPIRIT_API SPIRITcode spirit_news_print_all(SPIRIT *handle) {
 		return SPIRITE_OUT_OF_MEMORY;
 
 	res = Spirit_initCurlConnectionForUrl(handle, &curl, "news", &chunk);
-	printf("preperform %X\n", &curl);
+
 	curl_easy_perform(curl);
-	printf("performed well\n");
 	/* always cleanup -- did we cleanup the slist too? */
 	curl_easy_cleanup(curl);
 
-	printf("\n--- ALL NEWS ---\n");
-	printf(chunk.memory);
-	printf("\n================\n");
+	if (res != SPIRITE_OK) {
+		if (chunk.memory)
+			free(chunk.memory);
+		return res;
+	}
+
+	//printf(chunk.memory);
+	res = Spirit_printNewsFromJsonString(chunk.memory);
+
+	if (chunk.memory)
+		free(chunk.memory);
 
 	return res;
 }
