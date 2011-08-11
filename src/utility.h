@@ -9,6 +9,7 @@
 #define UTILITY_H_
 
 #include <stdio.h>
+#include <string.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,6 +21,7 @@ struct MemoryStruct {
 };
 
 void fprintNChars(FILE *file, char c, unsigned int n);
+char *my_strdup(const char *s);
 
 #ifdef __cplusplus
 }

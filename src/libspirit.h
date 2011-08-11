@@ -8,6 +8,8 @@
 #ifndef LIBSPIRIT_H_
 #define LIBSPIRIT_H_
 
+#include <stdarg.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -19,6 +21,7 @@ extern "C" {
 
 SPIRITcode Spirit_initLibcurlSettings(struct LibcurlSettings *curl);
 SPIRITcode Spirit_initCurlConnectionForUrl(struct SpiritHandle *spirit, CURL **curl_handle, const char *url, struct MemoryStruct *chunk);
+SPIRITcode Spirit_setopt(struct SpiritSession *data, SPIRIToption option, va_list param);
 
 #ifdef __cplusplus
 }

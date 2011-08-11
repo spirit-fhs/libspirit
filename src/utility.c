@@ -12,3 +12,12 @@ void fprintNChars(FILE *file, char c, unsigned int n) {
 	for (i = 0; i < n; ++i)
 		fprintf(file, "%c", c);
 }
+
+char *my_strdup(const char *s) {
+	char *p = malloc(strlen(s) + 1);
+	if (p) {
+		strcpy(p, s);
+	}
+	return p;
+}
+
