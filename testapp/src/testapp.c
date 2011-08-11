@@ -10,8 +10,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <libspirit/libspirit.h>
-#include <libspirit/libspirit_error.h>
+#include <libspirit/spirit_news.h>
+#include <libspirit/spirit_error.h>
 
 int main(void) {
 	SPIRIT *spirit_handle;

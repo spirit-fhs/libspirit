@@ -1,12 +1,12 @@
 /*
- * libspirit_common.h
+ * spirit_common.h
  *
  *  Created on: 04.08.2011
  *      Author: delbertooo
  */
 
-#ifndef LIBSPIRIT_COMMON_H_
-#define LIBSPIRIT_COMMON_H_
+#ifndef SPIRIT_COMMON_H_
+#define SPIRIT_COMMON_H_
 
 //includes
 
@@ -34,4 +34,4 @@ extern "C" {
 #endif
 
 
-#endif /* LIBSPIRIT_COMMON_H_ */
+#endif /* SPIRIT_COMMON_H_ */

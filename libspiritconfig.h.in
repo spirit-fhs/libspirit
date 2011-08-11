@@ -1,3 +1,5 @@
 // the configured options and settings for libspirit
 #define libspirit_VERSION_MAJOR @libspirit_VERSION_MAJOR@
 #define libspirit_VERSION_MINOR @libspirit_VERSION_MINOR@
+
+#define libspirit_USER_AGENT "libspirit/@libspirit_VERSION_MAJOR@.@libspirit_VERSION_MINOR@"

@@ -5,7 +5,7 @@
  *      Author: delbertooo
  */
 
-#include <libspirit/libspirit.h>
+#include <libspirit/spirit.h>
 
 LIBSPIRIT_API const char *spirit_errstring(SPIRITcode error) {
 	switch (error) {

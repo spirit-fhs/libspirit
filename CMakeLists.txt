@@ -10,10 +10,11 @@ set (incDir ${PROJECT_BINARY_DIR}/include/libspirit)
 
 SET (SRCS src/libspirit.c
           src/libspirit_error.c)
-SET (HDRS src/spirit_data.h)
-set (PUB_HDRS src/api/libspirit_common.h
-              src/api/libspirit.h
-              src/api/libspirit_error.h)
+SET (HDRS src/libspirit_data.h)
+set (PUB_HDRS src/api/spirit_common.h
+              src/api/spirit.h
+              src/api/spirit_error.h
+              src/api/spirit_news.h)
 
 # the name of the yajl directory
 set (YAJL_DIST_NAME yajl-2.0.3)

@@ -1,14 +1,18 @@
 /*
- * spirit_data.h
+ * libspirit_data.h
  *
  *  Created on: 10.08.2011
  *      Author: delbertooo
  */
 
-#ifndef SPIRIT_DATA_H_
-#define SPIRIT_DATA_H_
+#ifndef LIBSPIRIT_DATA_H_
+#define LIBSPIRIT_DATA_H_
 
-#include <libspirit/libspirit.h>
+#include <libspirit/spirit.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 struct LibcurlSettings {
 	char *ssl_cipher_type;
@@ -21,7 +25,9 @@ struct SpiritHandle {
 	char *base_url;
 };
 
+#ifdef __cplusplus
+}
+#endif
 
 
-
-#endif /* SPIRIT_DATA_H_ */
+#endif /* LIBSPIRIT_DATA_H_ */
