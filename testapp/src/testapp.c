@@ -27,10 +27,10 @@ int main(void) {
 
 	spirit_cleanup(spirit_handle);
 
-	//printf("-- libspirit test application --\n");
-	//fflush(stdout);
+	/*printf("-- libspirit test application --\n");
+	fflush(stdout);
 
-	//curltest("https://212.201.64.226:8443/fhs-spirit/news");
+	curltest("https://212.201.64.226:8443/fhs-spirit/news");*/
 
 	return EXIT_SUCCESS;
 }
