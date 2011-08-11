@@ -12,6 +12,7 @@
 extern "C" {
 #endif
 
+#include <curl_config.h>
 #include <curl/curl.h>
 
 #include "libspirit_data.h"
