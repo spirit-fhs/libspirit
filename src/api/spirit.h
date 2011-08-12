@@ -5,13 +5,21 @@
  *      Author: delbertooo
  */
 
-#include <libspirit/spirit_common.h>
-
 #ifndef SPIRIT_H_
 #define SPIRIT_H_
 
 #ifdef __cplusplus
 extern "C" {
+#endif
+
+#if (defined(_WIN32) || defined(WIN32))
+	#ifdef libspirit_EXPORTS
+		#define LIBSPIRIT_API __declspec(dllexport)
+	#else
+		#define LIBSPIRIT_API __declspec(dllimport)
+	#endif
+#else /* not MSVC */
+	#define LIBSPIRIT_API
 #endif
 
 
