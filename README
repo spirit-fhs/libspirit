@@ -25,6 +25,8 @@ DEPENDENCIES
   with "Light" as suffix. Its recommended to use the default installation
   settings and location to ensure CMake can find OpenSSL.
   
+  On Mac OS X 
+  
 BUILD ON WINDOWS WITH MSVC
   Start your console and enter
       cmake --help
@@ -44,6 +46,22 @@ BUILD ON UNIX WITH AUTOTOOLS AND GCC
   3. cmake -G "Unix Makefiles" ./../
   4. make
   
+BUILD ON MAC OS X
+  You need cmake and Xcode to be installed. If you got this you can follow
+  these steps:
+  
+  1. mkdir build
+  2. cd build
+  3. cmake -G "Unix Makefiles" ..
+  4. make
+  
+  ... or you can build libspirit using Apple's Xcode
+  
+  1. mkdir build
+  2. cd build
+  3. cmake -G "Xcode" ..
+  4. open the file "libspirit.xcodeproj" in Xcode and build ALL_BUILD
+  
 WHAT CHANGES HAPPENED TO CURL AND YAJL?
   There a nearly no changes but we need to add the compiler flag -fPIC to
   compile on Unix x64 systems. The following modifications are done:
@@ -59,6 +77,8 @@ WHAT CHANGES HAPPENED TO CURL AND YAJL?
           else() #HACK
             add_definitions ( -fPIC ) #HACK
           endif()
+          
+  Finally we need to tweak the search for OpenSSL on Windows:
           
       curl/CMakeLists.txt around line 256:
       
