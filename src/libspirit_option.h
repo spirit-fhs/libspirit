@@ -10,10 +10,6 @@
 
 #include <stdarg.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <libspirit/spirit.h>
 
 #include "libspirit_data.h"
@@ -22,8 +18,5 @@ extern "C" {
 SPIRITcode Spirit_setopt(struct SpiritHandle *data, SPIRIToption option, va_list param);
 
 
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* LIBSPIRIT_OPTION_H_ */

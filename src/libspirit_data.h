@@ -10,10 +10,6 @@
 
 #include <libspirit/spirit.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 struct LibcurlSettings {
 	char *ssl_cipher_type;
 	char *header_accept;
@@ -24,10 +20,6 @@ struct SpiritHandle {
 	struct LibcurlSettings curl;
 	char *base_url;
 };
-
-#ifdef __cplusplus
-}
-#endif
 
 
 #endif /* LIBSPIRIT_DATA_H_ */

@@ -11,8 +11,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifdef __cplusplus
-extern "C" {
+#ifndef my_free
+#define my_free(x) if (x != NULL) free(x);
 #endif
 
 struct MemoryStruct {
@@ -23,8 +23,5 @@ struct MemoryStruct {
 void fprintNChars(FILE *file, char c, unsigned int n);
 char *my_strdup(const char *s);
 
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* UTILITY_H_ */

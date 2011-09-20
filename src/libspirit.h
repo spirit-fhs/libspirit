@@ -10,10 +10,6 @@
 
 #include <stdarg.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <curl/curl.h>
 
 #include "libspirit_data.h"
@@ -21,10 +17,6 @@ extern "C" {
 
 SPIRITcode Spirit_initLibcurlSettings(struct LibcurlSettings *curl);
 SPIRITcode Spirit_initCurlConnectionForUrl(struct SpiritHandle *spirit, CURL **curl_handle, const char *url, struct MemoryStruct *chunk);
-
-#ifdef __cplusplus
-}
-#endif
 
 
 #endif /* LIBSPIRIT_H_ */
