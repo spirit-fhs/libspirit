@@ -9,11 +9,8 @@
 #define LIBSPIRIT_OPTION_H_
 
 #include <stdarg.h>
-
 #include <libspirit/spirit.h>
-
 #include "libspirit_data.h"
-#include "utility.h"
 
 SPIRITcode Spirit_setopt(struct SpiritHandle *data, SPIRIToption option, va_list param);
 

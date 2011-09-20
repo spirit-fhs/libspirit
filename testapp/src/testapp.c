@@ -28,7 +28,7 @@ int main(void) {
 	printf("\n\n");
 	spirit_setopt(spirit_handle, SPIRITOPT_HEADER_ACCEPT, "Accept: application/xml");
 	res = spirit_news_print_all(spirit_handle);
-	printf("\n\tSPIRIT RESULT (error expected) %i: %s\n", res, spirit_errstring(res));
+	printf("\n\tSPIRIT RESULT (no more error expected) %i: %s\n", res, spirit_errstring(res));
 	spirit_cleanup(spirit_handle);
 
 	return EXIT_SUCCESS;

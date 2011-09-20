@@ -9,9 +9,7 @@
 #define LIBSPIRIT_H_
 
 #include <stdarg.h>
-
 #include <curl/curl.h>
-
 #include "libspirit_data.h"
 #include "utility.h"
 

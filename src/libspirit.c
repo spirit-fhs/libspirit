@@ -15,7 +15,6 @@
 #include <yajl/yajl_tree.h>
 #include <curl_config.h>
 #include <curl/curl.h>
-
 #include <libspirit/spirit.h>
 
 #include "libspirit.h"
@@ -29,7 +28,7 @@
 
 
 
-
+/* callback function for libcurl */
 static size_t WriteMemoryCallback(void *ptr, size_t size, size_t nmemb,
 		void *data)
 {
@@ -39,8 +38,10 @@ static size_t WriteMemoryCallback(void *ptr, size_t size, size_t nmemb,
 	mem->memory = realloc(mem->memory, mem->size + realsize + 1);
 	if (mem->memory == NULL) {
 		/* out of memory! */
-		printf("not enough memory (realloc returned NULL)\n");
-		exit(EXIT_FAILURE);
+		/*printf("not enough memory (realloc returned NULL)\n");
+		exit(EXIT_FAILURE);*/
+		mem->size = 0;
+		return 0;
 	}
 
 	memcpy(&(mem->memory[mem->size]), ptr, realsize);
@@ -51,17 +52,21 @@ static size_t WriteMemoryCallback(void *ptr, size_t size, size_t nmemb,
 }
 
 
+/* initialize a handles libcurl settings */
 SPIRITcode Spirit_initLibcurlSettings(struct LibcurlSettings *curl)
 {
 	SPIRITcode res = SPIRITE_OK;
 
 	curl->header_accept = my_strdup("Accept: application/json");
-	curl->ssl_cipher_type = my_strdup("DHE-RSA-AES256-SHA");
+	/*curl->ssl_cipher_type = my_strdup("DHE-RSA-AES256-SHA");*/
+	curl->ssl_cipher_type = my_strdup("DEFAULT");
 	curl->user_agent = my_strdup(libspirit_USER_AGENT);
 
 	return res;
 }
 
+
+/* initialize a curl handle for libspirit */
 SPIRITcode Spirit_initCurlConnectionForUrl(struct SpiritHandle *spirit, CURL **curl_handle, const char *url, struct MemoryStruct *chunk)
 {
 	struct curl_slist *slist = NULL;
@@ -93,7 +98,7 @@ SPIRITcode Spirit_initCurlConnectionForUrl(struct SpiritHandle *spirit, CURL **c
 		/* skip check if site you're connecting uses a different host name to what they have mentioned in their server certificate's commonName */
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
 #endif
-		//curl_easy_setopt(curl, CURLOPT_SSL_CIPHER_LIST, spirit->curl.ssl_cipher_type);
+		curl_easy_setopt(curl, CURLOPT_SSL_CIPHER_LIST, spirit->curl.ssl_cipher_type);
 		curl_easy_setopt( curl, CURLOPT_USERAGENT, spirit->curl.user_agent);
 
 		slist = curl_slist_append(slist, spirit->curl.header_accept);
@@ -113,7 +118,7 @@ SPIRITcode Spirit_initCurlConnectionForUrl(struct SpiritHandle *spirit, CURL **c
 
 
 
-
+/* initialize a spirit handle */
 LIBSPIRIT_API SPIRIT *spirit_init(const char *base_url)
 {
 	struct SpiritHandle *handle;
@@ -130,13 +135,14 @@ LIBSPIRIT_API SPIRIT *spirit_init(const char *base_url)
 }
 
 
+/* frees a spirit handle */
 LIBSPIRIT_API void spirit_cleanup(SPIRIT *handle)
 {
 	struct SpiritHandle *data = (struct SpiritHandle *)handle;
 
-	my_free((&data->curl)->header_accept)
-	my_free((&data->curl)->ssl_cipher_type)
-	my_free((&data->curl)->user_agent)
-	my_free(data->base_url)
-	my_free(data)
+	SPIRIT_FREE((&data->curl)->header_accept)
+	SPIRIT_FREE((&data->curl)->ssl_cipher_type)
+	SPIRIT_FREE((&data->curl)->user_agent)
+	SPIRIT_FREE(data->base_url)
+	SPIRIT_FREE(data)
 }

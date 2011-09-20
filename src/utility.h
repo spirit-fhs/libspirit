@@ -11,10 +11,13 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifndef my_free
-#define my_free(x) if (x != NULL) free(x);
+/* simple macro to free memory if not NULL */
+#ifdef SPIRIT_FREE
+#undef SPIRIT_FREE
 #endif
+#define SPIRIT_FREE(x) if (x != NULL) free(x);
 
+/* a struct to hold a chunk of memory */
 struct MemoryStruct {
 	char *memory;
 	size_t size;

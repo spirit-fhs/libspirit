@@ -10,14 +10,13 @@
 #include <curl_config.h>
 #include <curl/curl.h>
 #include <yajl/yajl_tree.h>
-
 #include <libspirit/spirit.h>
 
 #include "libspirit.h"
 #include "utility.h"
 
 
-
+/* print formatted news from json string */
 static SPIRITcode Spirit_printNewsFromJsonString(const char* json)
 {
 	yajl_val node;
@@ -70,6 +69,8 @@ static SPIRITcode Spirit_printNewsFromJsonString(const char* json)
 	return res;
 }
 
+
+/* print formatted news from json string for the new REST service */
 static SPIRITcode Spirit_printNewsFromJsonStringNew(const char* json)
 {
 	yajl_val node;
@@ -117,6 +118,8 @@ static SPIRITcode Spirit_printNewsFromJsonStringNew(const char* json)
 	return res;
 }
 
+
+/* prints all news */
 LIBSPIRIT_API SPIRITcode spirit_news_print_all(SPIRIT *handle)
 {
 	struct SpiritHandle *data = (struct SpiritHandle *)handle;

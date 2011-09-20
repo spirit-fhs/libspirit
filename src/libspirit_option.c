@@ -4,9 +4,13 @@
  *  Created on: 12.08.2011
  *      Author: delbertooo
  */
-
+#include <stdarg.h>
+#include <libspirit/spirit.h>
+#include "utility.h"
+#include "libspirit_data.h"
 #include "libspirit_option.h"
 
+/* sets a spirit option to a value */
 #undef spirit_setopt
 LIBSPIRIT_API SPIRITcode spirit_setopt(SPIRIT *handle, SPIRIToption tag, ...)
 {
@@ -25,6 +29,7 @@ LIBSPIRIT_API SPIRITcode spirit_setopt(SPIRIT *handle, SPIRIToption tag, ...)
   return ret;
 }
 
+/* sets a string-option to a given value */
 static SPIRITcode setstropt(char **charp, char * s)
 {
 	if (*charp) {
@@ -44,6 +49,7 @@ static SPIRITcode setstropt(char **charp, char * s)
 	return SPIRITE_OK;
 }
 
+/* internal function to set an option */
 SPIRITcode Spirit_setopt(struct SpiritHandle *data, SPIRIToption option,
 		va_list param)
 {

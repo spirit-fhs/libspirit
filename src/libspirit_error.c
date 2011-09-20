@@ -7,6 +7,7 @@
 
 #include <libspirit/spirit.h>
 
+/* converts an error constant to a descriptive string */
 LIBSPIRIT_API const char *spirit_errstring(SPIRITcode error)
 {
 	switch (error) {
