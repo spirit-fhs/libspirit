@@ -23,15 +23,16 @@
 #include "libspirit_option.h"
 #include "utility.h"
 
-#define SKIP_PEER_VERIFICATION DEFINED
-#define SKIP_HOSTNAME_VERIFICATION DEFINED
+#define SKIP_PEER_VERIFICATION
+#define SKIP_HOSTNAME_VERIFICATION
 
 
 
 
 
 static size_t WriteMemoryCallback(void *ptr, size_t size, size_t nmemb,
-		void *data) {
+		void *data)
+{
 	size_t realsize = size * nmemb;
 	struct MemoryStruct *mem = (struct MemoryStruct *) data;
 
@@ -50,17 +51,19 @@ static size_t WriteMemoryCallback(void *ptr, size_t size, size_t nmemb,
 }
 
 
-SPIRITcode Spirit_initLibcurlSettings(struct LibcurlSettings *curl) {
+SPIRITcode Spirit_initLibcurlSettings(struct LibcurlSettings *curl)
+{
 	SPIRITcode res = SPIRITE_OK;
 
 	curl->header_accept = my_strdup("Accept: application/json");
 	curl->ssl_cipher_type = my_strdup("DHE-RSA-AES256-SHA");
-	curl->user_agent = libspirit_USER_AGENT;
+	curl->user_agent = my_strdup(libspirit_USER_AGENT);
 
 	return res;
 }
 
-SPIRITcode Spirit_initCurlConnectionForUrl(struct SpiritHandle *spirit, CURL **curl_handle, const char *url, struct MemoryStruct *chunk) {
+SPIRITcode Spirit_initCurlConnectionForUrl(struct SpiritHandle *spirit, CURL **curl_handle, const char *url, struct MemoryStruct *chunk)
+{
 	struct curl_slist *slist = NULL;
 	char *request_url;
 	SPIRITcode res = SPIRITE_OK;
@@ -78,8 +81,8 @@ SPIRITcode Spirit_initCurlConnectionForUrl(struct SpiritHandle *spirit, CURL **c
 	curl = curl_easy_init();
 	if (curl) {
 		curl_easy_setopt(curl, CURLOPT_URL, request_url);
-		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
-		curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L);
+		curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
+		curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1);
 
 #ifdef SKIP_PEER_VERIFICATION
 		/* connect to a site who isn't using a certificate that is signed by one of the certs in the CA bundle you have */
@@ -90,7 +93,7 @@ SPIRITcode Spirit_initCurlConnectionForUrl(struct SpiritHandle *spirit, CURL **c
 		/* skip check if site you're connecting uses a different host name to what they have mentioned in their server certificate's commonName */
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
 #endif
-		curl_easy_setopt(curl, CURLOPT_SSL_CIPHER_LIST, spirit->curl.ssl_cipher_type);
+		//curl_easy_setopt(curl, CURLOPT_SSL_CIPHER_LIST, spirit->curl.ssl_cipher_type);
 		curl_easy_setopt( curl, CURLOPT_USERAGENT, spirit->curl.user_agent);
 
 		slist = curl_slist_append(slist, spirit->curl.header_accept);
@@ -111,7 +114,8 @@ SPIRITcode Spirit_initCurlConnectionForUrl(struct SpiritHandle *spirit, CURL **c
 
 
 
-LIBSPIRIT_API SPIRIT *spirit_init(const char *base_url) {
+LIBSPIRIT_API SPIRIT *spirit_init(const char *base_url)
+{
 	struct SpiritHandle *handle;
 	handle = calloc(1, sizeof(struct SpiritHandle));
 	if (handle == NULL)
@@ -125,9 +129,14 @@ LIBSPIRIT_API SPIRIT *spirit_init(const char *base_url) {
 	return handle;
 }
 
-LIBSPIRIT_API void spirit_cleanup(SPIRIT *handle) {
+
+LIBSPIRIT_API void spirit_cleanup(SPIRIT *handle)
+{
 	struct SpiritHandle *data = (struct SpiritHandle *)handle;
 
-	if (data)
-		free(data);
+	my_free((&data->curl)->header_accept)
+	my_free((&data->curl)->ssl_cipher_type)
+	my_free((&data->curl)->user_agent)
+	my_free(data->base_url)
+	my_free(data)
 }
