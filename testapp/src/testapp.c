@@ -19,7 +19,7 @@ int main(void) {
 
 	printf("-- libspirit test application --\n");
 
-	spirit_handle = spirit_init("https://212.201.64.226:8443/fhs-spirit/");
+	spirit_handle = spirit_init("https://spirit.fh-schmalkalden.de/");
 	printf("\n=================================== ALL NEWS ===================================\n");
 	res = spirit_news_print_all(spirit_handle);
 	printf("\n================================================================================\n");

@@ -25,7 +25,8 @@ LIBSPIRIT_API SPIRITcode spirit_setopt(SPIRIT *handle, SPIRIToption tag, ...)
   return ret;
 }
 
-static SPIRITcode setstropt(char **charp, char * s) {
+static SPIRITcode setstropt(char **charp, char * s)
+{
 	if (*charp) {
 		free(*charp);
 		*charp = (char *) NULL;
@@ -44,7 +45,8 @@ static SPIRITcode setstropt(char **charp, char * s) {
 }
 
 SPIRITcode Spirit_setopt(struct SpiritHandle *data, SPIRIToption option,
-		va_list param) {
+		va_list param)
+{
 	/*char *argptr;*/
 	SPIRITcode result = SPIRITE_OK;
 

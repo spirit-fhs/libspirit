@@ -8,12 +8,12 @@ set (libspirit_VERSION_MINOR 0)
 
 set (incDir ${PROJECT_BINARY_DIR}/include/libspirit)
 
-SET (SRCS src/libspirit.c
+set (SRCS src/libspirit.c
           src/libspirit_error.c
           src/libspirit_news.c
           src/libspirit_option.c
           src/utility.c)
-SET (HDRS src/libspirit_data.h
+set (HDRS src/libspirit_data.h
           src/libspirit_option.h
           src/libspirit.h
           src/utility.h)

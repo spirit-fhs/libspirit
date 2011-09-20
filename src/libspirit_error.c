@@ -7,7 +7,8 @@
 
 #include <libspirit/spirit.h>
 
-LIBSPIRIT_API const char *spirit_errstring(SPIRITcode error) {
+LIBSPIRIT_API const char *spirit_errstring(SPIRITcode error)
+{
 	switch (error) {
 	case SPIRITE_OK:
 		return "No error";
