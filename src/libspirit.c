@@ -65,6 +65,14 @@ SPIRITcode Spirit_initLibcurlSettings(struct LibcurlSettings *curl)
 	return res;
 }
 
+static int progress_callback(void *clientp,
+                                      double dltotal,
+                                      double dlnow,
+                                      double ultotal,
+                                      double ulnow)
+{
+	return 0;
+}
 
 /* initialize a curl handle for libspirit */
 SPIRITcode Spirit_initCurlConnectionForUrl(struct SpiritHandle *spirit, CURL **curl_handle, const char *url, struct MemoryStruct *chunk)
@@ -87,7 +95,8 @@ SPIRITcode Spirit_initCurlConnectionForUrl(struct SpiritHandle *spirit, CURL **c
 	if (curl) {
 		curl_easy_setopt(curl, CURLOPT_URL, request_url);
 		curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
-		curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1);
+		curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L);
+		curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, progress_callback);
 
 #ifdef SKIP_PEER_VERIFICATION
 		/* connect to a site who isn't using a certificate that is signed by one of the certs in the CA bundle you have */
