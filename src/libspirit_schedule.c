@@ -15,7 +15,7 @@
 
 #include "libspirit.h"
 
-/* prints all news */
+/* prints all events for a course  */
 LIBSPIRIT_API SPIRITcode spirit_schedule_print(SPIRIT *handle, char *classname, char week)
 {
 	struct SpiritHandle *data = (struct SpiritHandle *)handle;

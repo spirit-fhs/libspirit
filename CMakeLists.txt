@@ -22,6 +22,7 @@ set (SRCS src/libspirit.c
           src/libspirit_error.c
           src/libspirit_news.c
           src/libspirit_option.c
+          src/libspirit_schedule.c
           src/utility.c)
 set (HDRS src/libspirit_data.h
           src/libspirit_option.h
@@ -29,7 +30,8 @@ set (HDRS src/libspirit_data.h
           src/utility.h)
 set (PUB_HDRS src/api/spirit.h
               src/api/spirit_error.h
-              src/api/spirit_news.h)
+              src/api/spirit_news.h
+              src/api/spirit_schedule.h)
 
 # the name of the yajl directory
 set (YAJL_DIST_NAME yajl-2.0.3)

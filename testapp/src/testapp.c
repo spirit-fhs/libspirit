@@ -12,9 +12,11 @@
 #include <stdlib.h>
 #include <libspirit/spirit_news.h>
 #include <libspirit/spirit_error.h>
+#include <libspirit/spirit_schedule.h>
 
 int main(void) {
 	SPIRIT *spirit_handle;
+	SPIRIT *schedule_handle;
 	SPIRITcode res;
 	int sz = 0;
 
@@ -45,7 +47,11 @@ int main(void) {
 		printf("\n\tSPIRIT RESULT NEW MEM %i: %s\n", res, spirit_errstring(res));
 		printf(mem);
 	}*/
+	schedule_handle = spirit_init("https://spirit.fh-schmalkalden.de/rest/");
 
+	spirit_schedule_print(schedule_handle, "MaI1", 'g');
+
+	spirit_cleanup(schedule_handle);
 	spirit_cleanup(spirit_handle);
 
 	return EXIT_SUCCESS;
