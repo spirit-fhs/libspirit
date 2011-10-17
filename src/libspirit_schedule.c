@@ -34,18 +34,31 @@ static SPIRITcode Spirit_printScheduleFromJsonString(const char* json)
 			yajl_val *allNews = node->u.array.values;
 			unsigned int i;
 			for (i = 0; i < node->u.array.len; ++i) {
-				const char * pathTitle[] = { "subject", (const char *) 0 };
-				const char * pathContent[] = { "news", (const char *) 0 };
+				const char * pathName[] = { "titleShort", (const char *) 0 };
+				const char * pathType[] = { "eventType", (const char *) 0 };
+				const char * pathTime[] = { "appointment", "time", (const char *) 0 };
+				const char * pathWeek[] = { "appointment", "week", (const char *) 0 };
+				const char * pathBuilding[] = { "appointment", "location", "place", "building", (const char *) 0 };
+				const char * pathRoom[] = { "appointment", "location", "place", "room", (const char *) 0 };
+				/*const char * pathMember[] = { "member", "name", (const char *) 0 };*/
 
-				yajl_val title = yajl_tree_get(*(allNews), pathTitle, yajl_t_string);
-				yajl_val content = yajl_tree_get(*(allNews), pathContent, yajl_t_string);
+				yajl_val name = yajl_tree_get(*(allNews), pathName, yajl_t_string);
+				yajl_val type = yajl_tree_get(*(allNews), pathType, yajl_t_string);
+				yajl_val time = yajl_tree_get(*(allNews), pathTime, yajl_t_string);
+				yajl_val week = yajl_tree_get(*(allNews), pathWeek, yajl_t_string);
+				yajl_val building = yajl_tree_get(*(allNews), pathBuilding, yajl_t_string);
+				yajl_val room = yajl_tree_get(*(allNews), pathRoom, yajl_t_string);
+				/*yajl_val member = yajl_tree_get(*(allNews), pathMember, yajl_t_string);*/
 
-				if (YAJL_IS_STRING(title) && YAJL_IS_STRING(content)) {
-					printf("--[ %s ]", YAJL_GET_STRING(title));
-					fprintNChars(stdout, '-', 80 - strlen(YAJL_GET_STRING(title)) - 6);
-					printf("\n%s\n", YAJL_GET_STRING(content));
-					fprintNChars(stdout, '-', 80);
-					printf("\n\n");
+				if (YAJL_IS_STRING(name) && YAJL_IS_STRING(type) && YAJL_IS_STRING(time) && YAJL_IS_STRING(week) && YAJL_IS_STRING(room) && YAJL_IS_STRING(building)) {
+					printf("%s [%s] im Raum [%s-%s] in der Zeitspanne [%s][%s] bei [%s].\n\n",
+							YAJL_GET_STRING(type),
+							YAJL_GET_STRING(name),
+							YAJL_GET_STRING(building),
+							YAJL_GET_STRING(room),
+							YAJL_GET_STRING(time),
+							YAJL_GET_STRING(week),
+							"DUMMY"/*YAJL_GET_STRING(member)*/);
 				}
 
 				++allNews;
