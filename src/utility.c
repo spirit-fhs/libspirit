@@ -11,7 +11,7 @@
 /* prints 'n' times the char 'c' to 'file' */
 void fprintNChars(FILE *file, char c, unsigned int n) {
 	unsigned int i;
-	for (i = 0; i < n; ++i)
+	for (i = n; i > 1; --i)
 		fprintf(file, "%c", c);
 }
 
