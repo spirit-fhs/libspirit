@@ -15,6 +15,7 @@ extern "C" {
 #endif
 
 LIBSPIRIT_API SPIRITcode spirit_news_print_all(SPIRIT *handle);
+LIBSPIRIT_API SPIRITcode spirit_news_by_date(SPIRIT *handle, char **mem, size_t *size);
 
 #ifdef __cplusplus
 }

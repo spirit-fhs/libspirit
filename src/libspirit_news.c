@@ -152,3 +152,65 @@ LIBSPIRIT_API SPIRITcode spirit_news_print_all(SPIRIT *handle)
 
 	return res;
 }
+
+static size_t GetSizeCallback(void *ptr, size_t size, size_t nmemb,
+		void *data)
+{
+	size_t realsize = size * nmemb;
+	size_t *mem = (size_t *) data;
+
+	*mem = realsize + 1;
+
+	return realsize;
+}
+
+static size_t WriteToUsermemoryCallback(void *ptr, size_t size, size_t nmemb,
+		void *data)
+{
+	size_t realsize = size * nmemb;
+	size_t *mem = (size_t *) data;
+
+	*mem = realsize + 1;
+
+	return realsize;
+}
+
+
+/* not stable by now - DO NOT USE */
+LIBSPIRIT_API SPIRITcode spirit_news_by_date(SPIRIT *handle, char **mem, size_t *size)
+{
+	struct SpiritHandle *data = (struct SpiritHandle *)handle;
+	CURL *curl;
+	SPIRITcode res = SPIRITE_OK;
+
+	if (mem == NULL) {
+
+		res = Spirit_initCurlConnectionForUrl(handle, &curl, "news", (void *)size);
+		/* send all data to this function  */
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, GetSizeCallback);
+
+		curl_easy_perform(curl);
+		/* always cleanup -- did we cleanup the slist too? */
+		curl_easy_cleanup(curl);
+
+		return res;
+	}
+
+	res = Spirit_initCurlConnectionForUrl(handle, &curl, "news", *mem);
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteToUsermemoryCallback);
+
+	curl_easy_perform(curl);
+	/* always cleanup -- did we cleanup the slist too? */
+	curl_easy_cleanup(curl);
+
+	if (res != SPIRITE_OK) {
+
+		return res;
+	}
+	//(*mem)[(*size)] = 0;
+
+	return res;
+
+
+}
+
